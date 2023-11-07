@@ -7,7 +7,33 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        .tab {
+            background: #ffffff;
+            color: #000000;
+            text-align:center;
+            width:94%;
+            margin:2%;
+        }
+
+        .tab tfoot p{
+            margin: 0;
+            padding: 0;
+        }
+        .tab td, th {
+            border:1pt solid #2a2a2a;
+        }
+
+        .tab tbody tr:nth-child(even) {
+            background: #e0e0e0;
+        }
+
+        .tab tfoot, thead {
+            background:#00d99b;
+            color: #1c1c1c;
+            font-size:120%
+        }
+    </style>
 </head>
 <body>
 <div id="content">
@@ -85,54 +111,51 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         }
 
         function pokaz($tut=null) {
-            $jezyki = ["C","CPP","Java","C#","HTML","CSS","XML","PHP","Javascript"];
+            $allLanguages = ["C","CPP","Java","C#","HTML","CSS","XML","PHP","Javascript"];
             print('<table class="tab"><thead>
-<tr>
-    <th rowspan="2">Nazwisko</th>
-    <th rowspan="2">Wiek</th>
-    <th rowspan="2">Mail</th>
-    <th rowspan="2">Panstwo</th>
-    <th rowspan="1">Jezyki</th>
-</tr>
-<tr>');
+                    <tr>
+                        <th rowspan="2">Nazwisko</th>
+                        <th rowspan="2">Wiek</th>
+                        <th rowspan="2">Mail</th>
+                        <th rowspan="2">Panstwo</th>
+                        <th rowspan="1" colspan="' . count($allLanguages) . '">Jezyki</th>
+                        <th rowspan="2">Sposób zapłaty</th>
+                    </tr>
+                    <tr>');
 
-            foreach ($jezyki as $jezyk) {
+            foreach ($allLanguages as $jezyk) {
                 print("<th>$jezyk</th>");
             }
             print("</tr></thead><tbody>");
             $wp=fopen("plik.csv", "r",1);
             while(($dataline = fgetcsv($wp, 100, ';')) !== FALSE) {
-                print("<tr><td>$dataline[0]</td>");
-                print("<td>$dataline[1]</td>");
-                print("<td>$dataline[2]</td>");
-                print("<td>$dataline[3]</td>");
-                print(join(",", znajdzJezyki($jezyki, $dataline[4])));
-                foreach (znajdzJezyki($jezyki, $dataline[4]) as $value) {
-                    print($value);
-                }
-                print("</tr>");
+                $jezykiArray = explode(",", htmlspecialchars($dataline[4]));
+                if($tut == null || in_array($tut ,$jezykiArray)) {
+                    print("<tr><td>" . htmlspecialchars($dataline[0]) . "</td>");
+                    print("<td>" . htmlspecialchars($dataline[1]) . "</td>");
+                    print("<td>" . htmlspecialchars($dataline[2]) . "</td>");
+                    print("<td>" . htmlspecialchars($dataline[3]) . "</td>");
 
+                    foreach (checkLanguages($allLanguages, $jezykiArray) as $value) {
+                        if ($value)
+                            print("<td>X</td>");
+                        else
+                            print("<td> </td>");
+                    }
+                    print("<td>" . htmlspecialchars($dataline[5]) . "</td>");
+                    print("</tr>");
+                }
             }
             print("</tbody></table>");
             fclose($wp);
         }
 
-        function znajdzJezyki($jezyki, $wczytane) {
-            $znalezione = [];
-            $i = 0;
-            foreach ($jezyki as $jezyk) {
-                $found = false;
-                foreach ($wczytane as $value) {
-                    if($jezyk===$value) {
-                        $found = true;
-                        break;
-                    }
-                }
-                if($found) $znalezione[$i] = true;
-                else $znalezione[$i] = false;
-                $i++;
+        function checkLanguages($allLanguages, $someLanguages) {
+            $result = array();
+            foreach ($allLanguages as $language) {
+                $result[] = in_array($language, $someLanguages);
             }
-            return $znalezione;
+            return $result;
         }
 
         if(isset($_REQUEST["submit"])) {
@@ -140,6 +163,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             switch ($akcja) {
                 case "Zapisz": dodaj();break;
                 case "Pokaż": pokaz();break;
+                case "PHP": pokaz("PHP");break;
+                case "CPP": pokaz("CPP");break;
+                case "Java": pokaz("Java");break;
             }
         }
         ?>
