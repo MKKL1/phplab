@@ -38,12 +38,12 @@ function pokaz($tut=null) {
     print("</tr></thead><tbody>");
     $wp=fopen("dane.csv", "r",1);
     while(($dataline = fgetcsv($wp, 100, ';')) !== FALSE) {
-        $jezykiArray = explode(",", htmlspecialchars($dataline[4]));
+        $jezykiArray = explode(",", $dataline[4]);
         if($tut == null || in_array($tut ,$jezykiArray)) {
-            print("<tr><td>" . htmlspecialchars($dataline[0]) . "</td>");
-            print("<td>" . htmlspecialchars($dataline[1]) . "</td>");
-            print("<td>" . htmlspecialchars($dataline[2]) . "</td>");
-            print("<td>" . htmlspecialchars($dataline[3]) . "</td>");
+            print("<tr><td>" . $dataline[0] . "</td>");
+            print("<td>" . $dataline[1] . "</td>");
+            print("<td>" . $dataline[2] . "</td>");
+            print("<td>" . $dataline[3] . "</td>");
 
             foreach (checkLanguages($allLanguages, $jezykiArray) as $value) {
                 if ($value)
@@ -51,7 +51,7 @@ function pokaz($tut=null) {
                 else
                     print("<td> </td>");
             }
-            print("<td>" . htmlspecialchars($dataline[5]) . "</td>");
+            print("<td>" . $dataline[5] . "</td>");
             print("</tr>");
         }
     }
@@ -89,5 +89,22 @@ function walidacja() {
     } else {
         echo "<br>Nie poprawnie dane: $errors</br>";
     }
+}
+
+function statystyki() {
+    $count = 0;
+    $mniejniz18 = 0;
+    $wiecejniz50 = 0;
+    $wp=fopen("dane.csv", "r",1);
+    while(($dataline = fgetcsv($wp, 100, ';')) !== FALSE) {
+        $wiek = $dataline[1];
+        if($wiek < 18) $mniejniz18++;
+        else if ($wiek >= 50) $wiecejniz50++;
+        $count++;
+    }
+    echo "<br>Liczba wszystkich zamówień: $count</br>";
+    echo "<br>Liczba zamówienień od osób w wieku < 18 lat: $mniejniz18</br>";
+    echo "<br>Liczba zamówienień od osób w wieku >= 50 lat: $wiecejniz50</br>";
+
 }
 ?>

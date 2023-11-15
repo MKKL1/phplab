@@ -87,6 +87,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                 <input type="submit" name="submit" value="PHP" />
                 <input type="submit" name="submit" value="CPP" />
                 <input type="submit" name="submit" value="Java" />
+                <input type="submit" name="submit" value="Statystyki" />
             </fieldset>
         </form>
     </div>
@@ -101,6 +102,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                 case "PHP": pokaz("PHP");break;
                 case "CPP": pokaz("CPP");break;
                 case "Java": pokaz("Java");break;
+                case "Statystyki": statystyki();break;
             }
         }
         ?>
