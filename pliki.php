@@ -91,75 +91,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         </form>
     </div>
         <?php
-        function dodaj() {
-            $dane = "";
-            dodaj_jeden($dane, "nazwisko", ";");
-            dodaj_jeden($dane, "wiek", ";");
-            dodaj_jeden($dane, "email", ";");
-            dodaj_jeden($dane, "panstwo", ";");
-            $dane .= htmlspecialchars(join(",",$_REQUEST["jezyki"])) . ";";
-            dodaj_jeden($dane, "zaplata", "");
-            $wp=fopen("plik.csv", "a",1);
-            fwrite($wp, $dane."\n");
-            fclose($wp);
-        }
 
-        function dodaj_jeden(&$dane, $nazwa, $end) {
-            if(isset($_REQUEST[$nazwa])) {
-                $dane .= htmlspecialchars($_REQUEST[$nazwa]).$end;
-            }
-        }
-
-        function pokaz($tut=null) {
-            $allLanguages = ["C","CPP","Java","C#","HTML","CSS","XML","PHP","Javascript"];
-            print('<table class="tab"><thead>
-                    <tr>
-                        <th rowspan="2">Nazwisko</th>
-                        <th rowspan="2">Wiek</th>
-                        <th rowspan="2">Mail</th>
-                        <th rowspan="2">Panstwo</th>
-                        <th rowspan="1" colspan="' . count($allLanguages) . '">Jezyki</th>
-                        <th rowspan="2">Sposób zapłaty</th>
-                    </tr>
-                    <tr>');
-
-            foreach ($allLanguages as $jezyk) {
-                print("<th>$jezyk</th>");
-            }
-            print("</tr></thead><tbody>");
-            $wp=fopen("plik.csv", "r",1);
-            while(($dataline = fgetcsv($wp, 100, ';')) !== FALSE) {
-                $jezykiArray = explode(",", htmlspecialchars($dataline[4]));
-                if($tut == null || in_array($tut ,$jezykiArray)) {
-                    print("<tr><td>" . htmlspecialchars($dataline[0]) . "</td>");
-                    print("<td>" . htmlspecialchars($dataline[1]) . "</td>");
-                    print("<td>" . htmlspecialchars($dataline[2]) . "</td>");
-                    print("<td>" . htmlspecialchars($dataline[3]) . "</td>");
-
-                    foreach (checkLanguages($allLanguages, $jezykiArray) as $value) {
-                        if ($value)
-                            print("<td>X</td>");
-                        else
-                            print("<td> </td>");
-                    }
-                    print("<td>" . htmlspecialchars($dataline[5]) . "</td>");
-                    print("</tr>");
-                }
-            }
-            print("</tbody></table>");
-            fclose($wp);
-        }
-
-        function checkLanguages($allLanguages, $someLanguages) {
-            $result = array();
-            foreach ($allLanguages as $language) {
-                $result[] = in_array($language, $someLanguages);
-            }
-            return $result;
-        }
-
-        if(isset($_REQUEST["submit"])) {
-            $akcja = $_REQUEST["submit"];
+        include_once "funkcje.php";
+        if(filter_input(INPUT_POST, "submit")) {
+            $akcja = filter_input(INPUT_POST, "submit");
             switch ($akcja) {
                 case "Zapisz": dodaj();break;
                 case "Pokaż": pokaz();break;
