@@ -12,7 +12,7 @@ function dodajDoPliku($path, $dane) {
     foreach ($dane as $item) {
         $i++;
         if(is_array($item))
-            $daneDoZapisu .= implode(",", $item) . ($i === $c ? "" : ";");
+            $daneDoZapisu .= funkcje . phpimplode(",", $item) . ($i === $c ? "" : ";");
         else $daneDoZapisu .= $item . ($i === $c ? "" : ";");
     }
     fwrite($wp, $daneDoZapisu . PHP_EOL);
