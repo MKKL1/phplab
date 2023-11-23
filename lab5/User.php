@@ -40,9 +40,61 @@ class User
     }
 
     public function show() {
-        echo "$this->userName $this->fullName $this->email status: $this->status" . $this->date->format('Y-m-d H:i:s');
+        echo "$this->userName $this->fullName $this->email status: $this->status " . $this->date->format('Y-m-d H:i:s');
     }
 
+    private static $filename = "users.json";
+    private static $filenameXML = "users.xml";
+    public static function getAllUsers() {
+        $contents = file_get_contents(User::$filename);
+        $userArr = json_decode($contents);
+        foreach ($userArr as $val) {
+            echo "<p>" . $val->userName . " " . $val->fullName . " " . $val->date . "</p>";
+        }
+    }
+
+    public static function getAllUsersFromXML(){
+        $users = simplexml_load_file(User::$filenameXML);
+        echo "<ul>";
+        foreach ($users as $user){
+            $userName = $user->userName;
+            $fullName = $user->fullName;
+            $email = $user->email;
+            $password = $user->passwd;
+            $date = $user->date;
+            $status = $user->status;
+            echo "<li> $userName $fullName $email $password $date $status </li>";
+        }
+        echo "</ul>";
+    }
+
+    function toArray(){
+        return [
+            "userName" => $this->userName,
+            "fullName" => $this->fullName,
+            "passwd" => $this->passwd,
+            "email" => $this->email,
+            "date" => $this->date->format('Y-m-d H:i:s'),
+            "status" => $this->status
+        ];
+    }
+
+    function save(){
+        $tab = json_decode(file_get_contents(User::$filename),true);
+        array_push($tab,$this->toArray());
+        file_put_contents(User::$filename, json_encode($tab));
+    }
+    public function saveXML() {
+        $xml = simplexml_load_file(User::$filenameXML);
+        $xmlChild = $xml->addChild("user");
+        $xmlChild->addChild("userName", $this->getUserName());
+        $xmlChild->addChild("fullName", $this->getFullName());
+        $xmlChild->addChild("email", $this->getEmail());
+        $xmlChild->addChild("passwd", $this->getPasswd());
+        $xmlChild->addChild("date", $this->getDate());
+        $xmlChild->addChild("status", $this->getStatus());
+        $xml->asXML(User::$filenameXML);
+    }
     /**
      * @return string
      */
