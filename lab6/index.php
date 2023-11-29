@@ -22,7 +22,6 @@ function dodajdoBD(Baza $bd)
         'zaplata' => ['filter' => FILTER_SANITIZE_SPECIAL_CHARS]
     ];
     $dane = filter_input_array(INPUT_POST, $args);
-    //var_dump($dane);
     $errors = "";
     foreach ($dane as $key => $val) {
         if ($val === false or $val === NULL) {
@@ -37,9 +36,11 @@ function dodajdoBD(Baza $bd)
         $jezyki = implode(",", $dane['jezyki']);
         $zaplata = $dane['zaplata'];
         $sql = "INSERT INTO klienci VALUES (NULL, '$nazwisko', '$wiek', '$panstwo', '$email', '$jezyki', '$zaplata');";
-        $bd->query($sql);
+        if(!$bd->insert($sql)) {
+            echo "Błąd dodawania do bazy danych";
+        }
     } else {
-
+        echo "errors: ", $errors;
     }
 
 }
@@ -51,7 +52,7 @@ if (filter_input(INPUT_POST, "submit")) {
             dodajdoBD($bd);
             break;
         case "Pokaż" :
-            echo $bd->select("select Nazwisko, Zamowienie from klienci", ["Nazwisko", "Zamowienie"]);
+            echo $bd->select("select * from klienci;", ["Nazwisko", "Zamowienie"]);
             break;
     }
 }

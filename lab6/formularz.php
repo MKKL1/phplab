@@ -5,7 +5,7 @@
         <table>
             <tr>
                 <td>Podaj nazwisko:</td>
-                <td><input type="text" name="nazwisko" pattern="[a-zA-Z0-9_-]{3,15}"/></td>
+                <td><input type="text" name="nazwisko"/></td>
             </tr>
             <tr>
                 <td>Wiek:</td>
@@ -41,7 +41,8 @@
         <input type="radio" name="zaplata" value="visa" /> visa <br />
         <input type="radio" name="zaplata" value="przelew" /> przelew bankowy<br />
         <br />
-        <input type="submit" value="Wyślij" />
-        <input type="reset" value="Wyczyść" />
+        <input type="submit" name='submit' value="Dodaj" />
+        <input type="submit" name='submit' value="Pokaż" />
+        <input type="reset" name='reset' value="Wyczyść" />
     </fieldset>
 </form>

@@ -5,7 +5,7 @@ class Baza
 
     public function __construct($server, $user, $pass, $baza)
     {
-        $this->mysqli = new mysqli($server, $user, $pass, $baza);//TODO mysqli not found
+        $this->mysqli = new mysqli($server, $user, $pass, $baza);
         if ($this->mysqli->connect_errno) {
             printf("Nie udało sie połączenie z serwerem: %s\n",
                 $this->mysqli->connect_error);
@@ -14,6 +14,8 @@ class Baza
         if ($this->mysqli->set_charset("utf8")) {
             //udało sie zmienić kodowanie
         }
+        echo "HALOOOOO";
+        echo $this->mysqli->host_info . "\n";
     }
 
     function __destruct() {
@@ -46,7 +48,7 @@ class Baza
         return $tresc;
     }
 
-    public function query($sql) {
+    public function insert($sql) {
         if($this->mysqli->query($sql))
             return true;
         else return false;
