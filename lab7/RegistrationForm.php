@@ -1,4 +1,4 @@
-<?php
+<?php namespace lab7;
 
 class RegistrationForm
 {
