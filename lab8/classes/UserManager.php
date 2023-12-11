@@ -4,24 +4,6 @@ namespace lab8;
 
 class UserManager
 {
-    function loginForm()
-    {
-        ?>
-        <h3>Formularz logowania</h3><p>
-        <form action="processLogin.php" method="post">
-            <table>
-                <tr>
-                    <td>Nazwa użytkownika</td>
-                    <td><input type="text" name="login"/></td>
-                </tr>
-                <tr>
-                    <td>Hasło</td>
-                    <td><input type="password" name="passwd"/></td>
-                </tr>
-            </table>
-            <input type="submit" value="Zaloguj" name="zaloguj" />
-        </form></p> <?php
-    }
 
     /**
      * @param Baza $db

@@ -1,4 +1,5 @@
 <?php namespace lab8;
+
     include_once 'Baza.php';
     include_once 'User.php';
     include_once 'UserManager.php';

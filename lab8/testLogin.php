@@ -9,6 +9,9 @@
 <body>
 <?php
 
+use lab8\classes\Baza;
+use lab8\classes\UserManager;
+
 include_once "Baza.php";
 include_once "User.php";
 include_once "UserManager.php";
@@ -28,7 +31,7 @@ if($userId >= 0) {
         }
     }
 }
-echo "<a href='processLogin.php?akcja=wyloguj' >Wyloguj</a> </p>";
+echo "<a href='classes/processLogin.php?akcja=wyloguj' >Wyloguj</a> </p>";
 ?>
 </body>
 </html>
