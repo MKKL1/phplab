@@ -1,68 +1,28 @@
-<?php
-
-namespace lab8;
+<?php namespace lab8;
 
 class UserManager
 {
+    private Baza $baza;
+    public function __construct(Baza $baza)
+    {
+        $this->baza = $baza;
+    }
 
-    /**
-     * @param Baza $db
-     * @return mixed
-     */
-    function login($db) {
-        $args = [
-            'login' => FILTER_SANITIZE_ADD_SLASHES,
-            'passwd' => FILTER_SANITIZE_ADD_SLASHES
-        ];
+    function add(User $user)
+    {
+        $formattedDate = $user->getDate()->format('Y-m-d H:i:s');
+        $username = $user->getUserName();
+        $fullName = $user->getFullName();
+        $email = $user->getEmail();
+        $passwd = $user->getPasswd();
+        $status = $user->getStatus();
+        $sql = "INSERT INTO users VALUES (NULL, '$username', '$fullName', '$email', '$passwd', '$status', '$formattedDate');";
+        try {
+            $this->baza->query($sql);
+        } catch (\PDOException $e) {
+            return false;
+        }
+        return true;
+    }
 
-        $dane = filter_input_array(INPUT_POST, $args);
-        $login = $dane["login"];
-        $passwd = $dane["passwd"];
-        $userId = $db->selectUser($login, $passwd, "users");
-        if ($userId >= 0) {
-            //rozpocznij sesję zalogowanego użytkownika
-            session_start();
-            //usuń wszystkie wpisy historyczne dla użytkownika o $userId
-            $db->delete("DELETE FROM logged_in_users WHERE userId='$userId'");
-            //ustaw datę - format("Y-m-d H:i:s");
-            $date = new \DateTime('now');
-            $dateString = $date->format("Y-m-d H:i:s");
-            //pobierz id sesji i dodaj wpis do tabeli logged_in_users
-            $sql = "INSERT INTO logged_in_users VALUES ('" . session_id() . "', '$userId', '$dateString');";
-            $db->insert($sql);
-        }
-        return $userId;
-    }
-    /**
-     * @param Baza $db
-     */
-    function logout($db) {
-//pobierz id bieżącej sesji (pamiętaj o session_start()
-        session_start();
-        $sessionId = session_id();
-//usuń sesję (łącznie z ciasteczkiem sesyjnym)
-        $_SESSION = [];
-        setcookie($_COOKIE[session_name()]);
-        session_destroy();
-//usuń wpis z id bieżącej sesji z tabeli logged_in_users
-        $db->delete("DELETE FROM logged_in_users WHERE sessionId='$sessionId'");
-    }
-    /**
-     * @param Baza $db
-     * @param string $sessionId
-     */
-    function getLoggedInUser($db, $sessionId) {
-//wynik $userId - znaleziono wpis z id sesji w tabelilogged_in_users
-//wynik -1 - nie ma wpisu dla tego id sesji w tabelilogged_in_users
-        $id = -1;
-        $sql = "SELECT * FROM logged_in_users WHERE sessionId='$sessionId'";
-        if ($result = $db->query($sql)) {
-            $ile = $result->num_rows;
-            if ($ile == 1) {
-                $row = $result->fetch_object();
-                $id = $row->userId;
-            }
-        }
-        return $id;
-    }
 }
