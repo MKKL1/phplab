@@ -18,7 +18,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                     print("<div class='column'>");
                     for ($j = 0; $j < $cols; $j++) {
                         $nazwa = 'obraz' . $x;
-                        print("<img src='obrazki/$nazwa.JPG' alt='$nazwa'/>" );
+                        print("<img src='zdjecia/$nazwa.JPG' alt='$nazwa'/>" );
                         $x += 1;
                     }
                     print("</div>");
