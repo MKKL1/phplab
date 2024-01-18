@@ -3,7 +3,7 @@
 //pomocnicza funkcja generująca formularz:
 function drukuj_form() {
     $zawartosc = '<div id="tresc">
-<form action="?strona=formularz" method="post">
+<form action="http://localhost/phplab/lab11/skrypty/formularz.php" method="post">
     <fieldset style="width:80%">
         <legend>Formularz</legend>
         <table>
@@ -91,9 +91,9 @@ function dodajdoBD($bd) { //bez zmian
 }
 
 //uchwyt do bazy klienci:
-include_once "classes/Baza.php";
+include_once "../classes/Baza.php";
 $tytul = "Formularz zamowienia";
-$zawartosc = drukuj_form();
+echo drukuj_form();
 $bd = new Baza("localhost", "root", "", "klienci");
 if (filter_input(INPUT_POST, "submit")) {
     $akcja = filter_input(INPUT_POST, "submit");
@@ -102,7 +102,7 @@ if (filter_input(INPUT_POST, "submit")) {
             dodajdoBD($bd);
             break;
         case "Pokaż" :
-            $zawartosc.= $bd->select("select * from klienci", ["email", "zamowienie"]);
+            echo $bd->select("select * from klienci", ["email", "zamowienie"]);
             break;
     }
 }

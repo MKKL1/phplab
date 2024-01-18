@@ -10,38 +10,42 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Galeria zdjęć");
         pokazGalerie();
     });
+
+    var bform = document.getElementById('formularz');
+    bform.addEventListener('click', () => {
+        console.log("Formularz");
+        pokazFormularz();
+    });
 //dodaj słuchaczy akcji do pozostałych przycisków w nawigacji
 // ...
 });
 
 function pokazOnas() {
-    fetch("http://localhost/phplab/lab11/skrypty/onas.php")
-        .then((response) => {
-            if (response.status !== 200) {
-                return Promise.reject('Coś poszło nie tak!');
-            }
-            return response.text();
-        })
-        .then((data) => {
-            document.getElementById('main').innerHTML=data;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    $.ajax({
+        url: "http://localhost/phplab/lab11/skrypty/onas.php",
+        method: "get",
+    })
+    .done(res => {
+        document.getElementById('main').innerHTML=res;
+    });
 }
 function pokazGalerie() {
-    fetch("http://localhost/phplab/lab11/skrypty/galeria.php")
-        .then((response) => {
-            if (response.status !== 200) {
-                return Promise.reject('Coś poszło nie tak!');
-            }
-            return response.text();
-        })
-        .then((data) => {
-            document.getElementById('main').innerHTML=data;
-        })
-        .catch((error) => {
-            console.log(error);
+    $.ajax({
+        url: "http://localhost/phplab/lab11/skrypty/galeria.php",
+        method: "get",
+    })
+    .done(res => {
+        document.getElementById('main').innerHTML=res;
+    });
+}
+
+function pokazFormularz() {
+    $.ajax({
+        url: "http://localhost/phplab/lab11/skrypty/formularz.php",
+        method: "get",
+    })
+        .done(res => {
+            document.getElementById('main').innerHTML=res;
         });
 }
 //dodaj funkcje do obsługi kolejnych akci
